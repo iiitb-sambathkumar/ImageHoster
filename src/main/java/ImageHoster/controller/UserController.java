@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -42,18 +43,17 @@ public class UserController {
     //This controller method is called when the request pattern is of type 'users/registration' and also the incoming request is of POST type
     //This method calls the business logic and after the user record is persisted in the database, directs to login page
     @RequestMapping(value = "users/registration", method = RequestMethod.POST)
-    public String registerUser(User user, Model model) {
-
+    public String registerUser(User user, RedirectAttributes redirectAttrs) {
         //Method to validate if the password uses atleast 1 alphabet, 1 number and 1 special character
-        if (ValidPassword(user.getPassword())) {
+        if (validPassword(user.getPassword())) {
             userService.registerUser(user);
             return "users/login";
         }
         else {
             String error = "Password must contain atleast 1 alphabet, 1 number & 1 special character";
-            model.addAttribute("passwordTypeError", error);
-            model.addAttribute("User", user);
-            return "users/registration";
+            redirectAttrs.addAttribute("passwordTypeError", error).addFlashAttribute("passwordTypeError", error);
+            return "redirect:/users/registration";
+
 
         }
     }
@@ -94,10 +94,11 @@ public class UserController {
     }
 
     //Method to validate if the password uses atleast 1 alphabet, 1 number and 1 special character
-    private Boolean ValidPassword (String passw) {
+    private Boolean validPassword (String passw) {
+
         if(passw.length()>=3)
         {
-            Pattern alphabet = Pattern.compile("[a-zA-z]");
+            Pattern alphabet = Pattern.compile("[a-zA-Z]");
             Matcher isAlphabet = alphabet.matcher(passw);
             Pattern number = Pattern.compile("[0-9]");
             Matcher isNumber = number.matcher(passw);
