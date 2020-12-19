@@ -125,7 +125,6 @@ public class ImageController {
     }
 
     //Method to validate if the logged in user is the owner of the image
-
     private boolean validImageOwner (Integer imageId, HttpSession session) {
         //Get the image owner information
         Image Edimage = imageService.getImage(imageId);
