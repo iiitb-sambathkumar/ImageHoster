@@ -49,6 +49,8 @@ public class ImageController {
     @RequestMapping("/images/{title}")
     public String showImage(@PathVariable("title") String title, Model model) {
         Image image = imageService.getImageByTitle(title);
+        //Adding comments to model attribute
+        model.addAttribute("comments", image.getComments());
         model.addAttribute("image", image);
         model.addAttribute("tags", image.getTags());
         return "images/image";
@@ -58,6 +60,8 @@ public class ImageController {
     @RequestMapping("/images/{id}/{title}")
     public String showImage(@PathVariable("id") Integer id,@PathVariable("title") String title, Model model) {
         Image image = imageService.getImage(id);
+        //Adding comments to model attribute
+        model.addAttribute("comments", image.getComments());
         model.addAttribute("image", image);
         model.addAttribute("tags", image.getTags());
         return "images/image";
@@ -110,6 +114,7 @@ public class ImageController {
         if(validImageOwner(imageId,session)) {
 
             String tags = convertTagsToString(image.getTags());
+
             model.addAttribute("image", image);
             model.addAttribute("tags", tags);
             return "images/edit";
@@ -119,6 +124,8 @@ public class ImageController {
             String imageTitle = imageService.getImage(imageId).getTitle();
             String error = "Only the owner of the image can edit the image";
             model.addAttribute("editError",error);
+            //Adding comments to model attribute
+            model.addAttribute("comments", image.getComments());
             model.addAttribute("image",image);
             return "/images/image";
         }
@@ -191,6 +198,8 @@ public class ImageController {
                 String imageTitle = imageService.getImage(imageId).getTitle();
                 String error = "Only the owner of the image can delete the image";
                 model.addAttribute("deleteError",error);
+                //Adding comments to model attribute
+                model.addAttribute("comments", image.getComments());
                 model.addAttribute("image",image);
                 return "/images/image";
             }
