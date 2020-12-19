@@ -47,7 +47,7 @@ public class UserController {
         //Method to validate if the password uses atleast 1 alphabet, 1 number and 1 special character
         if (ValidPassword(user.getPassword())) {
             userService.registerUser(user);
-            return "redirect:/users/login";
+            return "users/login";
         }
         else {
             String error = "Password must contain atleast 1 alphabet, 1 number & 1 special character";
